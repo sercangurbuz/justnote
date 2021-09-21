@@ -1,0 +1,33 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateNoteInput {
+  description: String!
+  status: String!
+  title: String!
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type Mutation {
+  createNote(data: CreateNoteInput!): Note!
+}
+
+type Note {
+  """Identifies the date and time when the object was created."""
+  createdAt: Date!
+  description: String!
+  id: Int!
+  status: String!
+  title: String!
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: Date!
+}
+
+type Query {
+  note(id: Int!): Note
+  notes(description: String, status: String, title: String): [Note!]!
+}
