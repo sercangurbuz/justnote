@@ -1,0 +1,55 @@
+import { PrismaService } from 'nestjs-prisma';
+import { GqlAuthGuard } from '../../guards/gql-auth.guard';
+import {
+  Resolver,
+  Query,
+  Parent,
+  Mutation,
+  Args,
+  ResolveField,
+} from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { UserEntity } from '../../decorators/user.decorator';
+import { User } from '../../models/user.model';
+import { ChangePasswordInput } from './dto/change-password.input';
+import { UserService } from 'src/services/user.service';
+import { UpdateUserInput } from './dto/update-user.input';
+
+@UseGuards(GqlAuthGuard)
+@Resolver(() => User)
+export class UserResolver {
+  constructor(
+    private userService: UserService,
+    private prisma: PrismaService,
+  ) {}
+
+  @Query(() => User)
+  me(@UserEntity() user: User): User {
+    return user;
+  }
+
+  @Mutation(() => User)
+  updateUser(
+    @UserEntity() user: User,
+    @Args('data') newUserData: UpdateUserInput,
+  ) {
+    return this.userService.updateUser(user.id, newUserData);
+  }
+
+  @Mutation(() => User)
+  changePassword(
+    @UserEntity() user: User,
+    @Args('data') changePassword: ChangePasswordInput,
+  ) {
+    return this.userService.changePassword(
+      user.id,
+      user.password,
+      changePassword,
+    );
+  }
+
+  @ResolveField('notes')
+  notes(@Parent() user: User) {
+    return this.prisma.user.findUnique({ where: { id: user.id } }).notes();
+  }
+}

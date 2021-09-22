@@ -9,9 +9,6 @@ export class CreateNoteInput {
   description: string;
 
   @Field()
-  status: NoteStatus;
-
-  @Field()
   @IsNotEmpty()
   title: string;
 }

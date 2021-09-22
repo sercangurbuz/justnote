@@ -11,7 +11,7 @@ export class NoteService {
     return this.prisma.note.findUnique({ where: { id } });
   }
 
-  getNotes(noteArgs: NotesArgs, select: any) {
+  getNotes(noteArgs: NotesArgs) {
     return this.prisma.note.findMany({
       where: {
         OR: [
@@ -26,13 +26,17 @@ export class NoteService {
           },
         ],
       },
-      ...select,
     });
   }
 
-  createNote(data: CreateNoteInput) {
+  createNote(data: CreateNoteInput, userId: number) {
     return this.prisma.note.create({
-      data,
+      data: {
+        description: data.description,
+        title: data.title,
+        userId: userId,
+        status: 'PENDING',
+      },
     });
   }
 }

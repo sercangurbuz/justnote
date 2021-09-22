@@ -2,17 +2,40 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Auth {
+  """JWT access token"""
+  accessToken: String!
+
+  """JWT refresh token"""
+  refreshToken: String!
+  user: User!
+}
+
+input ChangePasswordInput {
+  newPassword: String!
+  oldPassword: String!
+}
+
 input CreateNoteInput {
   description: String!
-  status: String!
   title: String!
 }
 
 """Date custom scalar type"""
 scalar Date
 
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
+  changePassword(data: ChangePasswordInput!): User!
   createNote(data: CreateNoteInput!): Note!
+  login(data: LoginInput!): Auth!
+  refreshToken: Token!
+  signup(data: SignupInput!): Auth!
+  updateUser(data: UpdateUserInput!): User!
 }
 
 type Note {
@@ -25,9 +48,48 @@ type Note {
 
   """Identifies the date and time when the object was last updated."""
   updatedAt: Date!
+  user: User!
 }
 
 type Query {
-  note(id: Int!): Note
+  me: User!
+  note(id: Int!): Note!
   notes(description: String, status: String, title: String): [Note!]!
+}
+
+input SignupInput {
+  email: String!
+  firstname: String
+  lastname: String
+  password: String!
+}
+
+type Subscription {
+  noteCreated: Note!
+}
+
+type Token {
+  """JWT access token"""
+  accessToken: String!
+
+  """JWT refresh token"""
+  refreshToken: String!
+}
+
+input UpdateUserInput {
+  firstname: String
+  lastname: String
+}
+
+type User {
+  """Identifies the date and time when the object was created."""
+  createdAt: Date!
+  email: String!
+  firstname: String!
+  id: Int!
+  lastname: String!
+  notes: [Note!]!
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: Date!
 }

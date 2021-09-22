@@ -7,6 +7,8 @@ import config from './configs/config';
 import { GraphqlConfig } from './configs/config.interface';
 import { PrismaModule } from 'nestjs-prisma';
 import { NoteModule } from './resolvers/note/note.module';
+import { UserModule } from './resolvers/user/user.module';
+import { AuthModule } from './resolvers/auth/auth.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { NoteModule } from './resolvers/note/note.module';
       },
       isGlobal: true,
     }),
+    AuthModule,
+    UserModule,
     NoteModule,
   ],
   providers: [DateScalar],

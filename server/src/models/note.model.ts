@@ -1,5 +1,6 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { BaseModel } from './base.model';
+import { User } from './user.model';
 
 export enum TodoStatus {
   DONE = 'DONE',
@@ -19,4 +20,6 @@ export class NoteType extends BaseModel {
   description: string;
   @Field()
   status: TodoStatus;
+  @Field((type) => User)
+  user: User;
 }
