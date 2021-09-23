@@ -9,7 +9,6 @@ import {
   Resolver,
   Subscription,
 } from '@nestjs/graphql';
-import { PrismaSelect } from '@paljs/plugins';
 import { GraphQLResolveInfo } from 'graphql';
 import { NoteService } from '../../services/note.service';
 import { NotesArgs } from '../../models/args/notes.args';
@@ -22,7 +21,6 @@ import { User } from '../../models/user.model';
 import { PubSub } from 'graphql-subscriptions';
 
 const pubSub = new PubSub();
-@UseGuards(GqlAuthGuard)
 @Resolver(() => NoteType)
 export class NoteResolver {
   constructor(private notesService: NoteService) {}
