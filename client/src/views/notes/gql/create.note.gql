@@ -1,0 +1,6 @@
+#import ./note.fragment.gql;
+mutation CreateNote($data: CreateNoteInput!) {
+  createNote(data: $data) {
+    ...NoteDetails
+  }
+}
