@@ -1,0 +1,6 @@
+fragment NoteDetails on Note {
+  id
+  note
+  createdAt
+  updatedAt
+}

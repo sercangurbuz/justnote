@@ -7,8 +7,6 @@ import config from './configs/config';
 import { GraphqlConfig } from './configs/config.interface';
 import { PrismaModule } from 'nestjs-prisma';
 import { NoteModule } from './resolvers/note/note.module';
-import { UserModule } from './resolvers/user/user.module';
-import { AuthModule } from './resolvers/auth/auth.module';
 
 @Module({
   imports: [
@@ -22,8 +20,7 @@ import { AuthModule } from './resolvers/auth/auth.module';
             numberScalarMode: 'integer',
           },
           sortSchema: graphqlConfig.sortSchema,
-          autoSchemaFile:
-            graphqlConfig.schemaDestination || './src/schema.graphql',
+          autoSchemaFile: true,
           debug: graphqlConfig.debug,
           playground: graphqlConfig.playgroundEnabled,
           context: ({ req }) => ({ req }),
@@ -39,8 +36,6 @@ import { AuthModule } from './resolvers/auth/auth.module';
       },
       isGlobal: true,
     }),
-    AuthModule,
-    UserModule,
     NoteModule,
   ],
   providers: [DateScalar],

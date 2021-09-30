@@ -1,13 +1,6 @@
-query getNotes($title: String) {
-  notes(title: $title) {
-    id
-    title
-    description
-    createdAt
-    updatedAt
-    user {
-      firstname
-      lastname
-    }
+#import ./note.fragment.gql;
+query getNotes($note: String) {
+  notes(note: $note) {
+    ...NoteDetails
   }
 }

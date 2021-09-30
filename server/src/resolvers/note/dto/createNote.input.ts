@@ -1,14 +1,9 @@
-import { IsNotEmpty } from 'class-validator';
-import { InputType, Field } from '@nestjs/graphql';
-import { NoteStatus } from '.prisma/client';
+import { IsNotEmpty, MinLength } from 'class-validator';
+import { InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateNoteInput {
-  @Field()
   @IsNotEmpty()
-  description: string;
-
-  @Field()
-  @IsNotEmpty()
-  title: string;
+  @MinLength(5)
+  note: string;
 }

@@ -16,43 +16,13 @@ export type Scalars = {
   Date: any;
 };
 
-export type Auth = {
-  __typename?: 'Auth';
-  /** JWT access token */
-  accessToken: Scalars['String'];
-  /** JWT refresh token */
-  refreshToken: Scalars['String'];
-  user: User;
-};
-
-export type ChangePasswordInput = {
-  newPassword: Scalars['String'];
-  oldPassword: Scalars['String'];
-};
-
 export type CreateNoteInput = {
-  description: Scalars['String'];
-  title: Scalars['String'];
-};
-
-export type LoginInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  note: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  changePassword: User;
   createNote: Note;
-  login: Auth;
-  refreshToken: Token;
-  signup: Auth;
-  updateUser: User;
-};
-
-
-export type MutationChangePasswordArgs = {
-  data: ChangePasswordInput;
 };
 
 
@@ -60,37 +30,18 @@ export type MutationCreateNoteArgs = {
   data: CreateNoteInput;
 };
 
-
-export type MutationLoginArgs = {
-  data: LoginInput;
-};
-
-
-export type MutationSignupArgs = {
-  data: SignupInput;
-};
-
-
-export type MutationUpdateUserArgs = {
-  data: UpdateUserInput;
-};
-
 export type Note = {
   __typename?: 'Note';
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['Date'];
-  description: Scalars['String'];
   id: Scalars['Int'];
-  status: Scalars['String'];
-  title: Scalars['String'];
+  note: Scalars['String'];
   /** Identifies the date and time when the object was last updated. */
   updatedAt: Scalars['Date'];
-  user: User;
 };
 
 export type Query = {
   __typename?: 'Query';
-  me: User;
   note: Note;
   notes: Array<Note>;
 };
@@ -102,16 +53,7 @@ export type QueryNoteArgs = {
 
 
 export type QueryNotesArgs = {
-  description?: Maybe<Scalars['String']>;
-  status?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-};
-
-export type SignupInput = {
-  email: Scalars['String'];
-  firstname?: Maybe<Scalars['String']>;
-  lastname?: Maybe<Scalars['String']>;
-  password: Scalars['String'];
+  note?: Maybe<Scalars['String']>;
 };
 
 export type Subscription = {
@@ -119,55 +61,70 @@ export type Subscription = {
   noteCreated: Note;
 };
 
-export type Token = {
-  __typename?: 'Token';
-  /** JWT access token */
-  accessToken: Scalars['String'];
-  /** JWT refresh token */
-  refreshToken: Scalars['String'];
-};
-
-export type UpdateUserInput = {
-  firstname?: Maybe<Scalars['String']>;
-  lastname?: Maybe<Scalars['String']>;
-};
-
-export type User = {
-  __typename?: 'User';
-  /** Identifies the date and time when the object was created. */
-  createdAt: Scalars['Date'];
-  email: Scalars['String'];
-  firstname: Scalars['String'];
-  id: Scalars['Int'];
-  lastname: Scalars['String'];
-  notes: Array<Note>;
-  /** Identifies the date and time when the object was last updated. */
-  updatedAt: Scalars['Date'];
-};
-
-export type GetNotesQueryVariables = Exact<{
-  title?: Maybe<Scalars['String']>;
+export type CreateNoteMutationVariables = Exact<{
+  data: CreateNoteInput;
 }>;
 
 
-export type GetNotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', id: number, title: string, description: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', firstname: string, lastname: string } }> };
+export type CreateNoteMutation = { __typename?: 'Mutation', createNote: { __typename?: 'Note', id: number, note: string, createdAt: any, updatedAt: any } };
+
+export type NoteDetailsFragment = { __typename?: 'Note', id: number, note: string, createdAt: any, updatedAt: any };
+
+export type GetNotesQueryVariables = Exact<{
+  note?: Maybe<Scalars['String']>;
+}>;
 
 
-export const GetNotesDocument = gql`
-    query getNotes($title: String) {
-  notes(title: $title) {
-    id
-    title
-    description
-    createdAt
-    updatedAt
-    user {
-      firstname
-      lastname
-    }
-  }
+export type GetNotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', id: number, note: string, createdAt: any, updatedAt: any }> };
+
+export const NoteDetailsFragmentDoc = gql`
+    fragment NoteDetails on Note {
+  id
+  note
+  createdAt
+  updatedAt
 }
     `;
+export const CreateNoteDocument = gql`
+    mutation CreateNote($data: CreateNoteInput!) {
+  createNote(data: $data) {
+    ...NoteDetails
+  }
+}
+    ${NoteDetailsFragmentDoc}`;
+export type CreateNoteMutationFn = Apollo.MutationFunction<CreateNoteMutation, CreateNoteMutationVariables>;
+
+/**
+ * __useCreateNoteMutation__
+ *
+ * To run a mutation, you first call `useCreateNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNoteMutation, { data, loading, error }] = useCreateNoteMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateNoteMutation(baseOptions?: Apollo.MutationHookOptions<CreateNoteMutation, CreateNoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateNoteMutation, CreateNoteMutationVariables>(CreateNoteDocument, options);
+      }
+export type CreateNoteMutationHookResult = ReturnType<typeof useCreateNoteMutation>;
+export type CreateNoteMutationResult = Apollo.MutationResult<CreateNoteMutation>;
+export type CreateNoteMutationOptions = Apollo.BaseMutationOptions<CreateNoteMutation, CreateNoteMutationVariables>;
+export const GetNotesDocument = gql`
+    query getNotes($note: String) {
+  notes(note: $note) {
+    ...NoteDetails
+  }
+}
+    ${NoteDetailsFragmentDoc}`;
 
 /**
  * __useGetNotesQuery__
@@ -181,7 +138,7 @@ export const GetNotesDocument = gql`
  * @example
  * const { data, loading, error } = useGetNotesQuery({
  *   variables: {
- *      title: // value for 'title'
+ *      note: // value for 'note'
  *   },
  * });
  */

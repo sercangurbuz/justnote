@@ -12,30 +12,22 @@ export class NoteService {
   }
 
   getNotes(noteArgs: NotesArgs) {
+    if (Object.keys(noteArgs).length === 0) {
+      return this.prisma.note.findMany({ orderBy: { id: 'desc' } });
+    }
+
     return this.prisma.note.findMany({
       where: {
-        OR: [
-          {
-            title: { contains: noteArgs.title },
-          },
-          {
-            description: { contains: noteArgs.description },
-          },
-          {
-            status: noteArgs.status,
-          },
-        ],
+        note: { contains: noteArgs.note },
       },
+      orderBy: { id: 'desc' },
     });
   }
 
-  createNote(data: CreateNoteInput, userId: number) {
+  createNote(data: CreateNoteInput) {
     return this.prisma.note.create({
       data: {
-        description: data.description,
-        title: data.title,
-        userId: userId,
-        status: 'PENDING',
+        note: data.note,
       },
     });
   }

@@ -8,6 +8,7 @@ import theme from '../src/theme';
 import createEmotionCache from '../src/createEmotionCache';
 import withApollo from '../src/providers/Apollo';
 import { getDataFromTree } from '@apollo/client/react/ssr';
+import Layout from '../src/components/layout/Layout';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -27,7 +28,9 @@ function MyApp(props: MyAppProps) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </ThemeProvider>
     </CacheProvider>
   );

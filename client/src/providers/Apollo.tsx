@@ -38,7 +38,7 @@ export default withApollo(
       headers.cookie = cookie;
     }
 
-    const uri = process.env.API_URL;
+    const uri = 'http://localhost:3000/graphql';
 
     const httpLink = new HttpLink({
       uri,
@@ -49,14 +49,6 @@ export default withApollo(
       link: ApolloLink.from([errorLink, httpLink]),
       ssrMode: isServer(),
       headers,
-      // Note for Next.js:
-      // If you set this to a small value like "100", it will cause a rendering value.
-      // e.g, Expected server HTML to contain a matching <a> in <div>.
-      // And the page will look broken.
-      // https://www.apollographql.com/docs/react/performance/server-side-rendering/
-      // If you are using fetchPolicy: network-only or fetchPolicy: cache-and-network on some of the initial queries,
-      // you can pass the ssrForceFetchDelay option to skip force fetching during initialization,
-      // so that even those queries run using the cache:
       ssrForceFetchDelay: 5000,
       cache: new InMemoryCache().restore(initialState || {}),
     });
