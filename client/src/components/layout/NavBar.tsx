@@ -9,7 +9,8 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Input, Menu, NotificationsOutlined } from '@mui/icons-material';
+import { Input, Menu, NotificationsOutlined, Edit } from '@mui/icons-material';
+import LoginLogoutButton from './LoginLogoutButton';
 
 interface NavBarProps extends AppBarProps {
   onMobileNavOpen?: () => void;
@@ -27,9 +28,7 @@ function NavBar({ onMobileNavOpen, ...rest }: NavBarProps) {
               <NotificationsOutlined />
             </Badge>
           </IconButton>
-          <IconButton color="inherit" size="large">
-            <Input />
-          </IconButton>
+          <LoginLogoutButton />
         </Hidden>
         <Hidden lgUp>
           <IconButton color="inherit" onClick={onMobileNavOpen} size="large">

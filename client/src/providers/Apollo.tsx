@@ -38,7 +38,8 @@ export default withApollo(
       headers.cookie = cookie;
     }
 
-    const uri = 'http://localhost:3000/graphql';
+    const uri = '/api/graphql';
+    //const uri = 'http://localhost:3000/graphql';
 
     const httpLink = new HttpLink({
       uri,

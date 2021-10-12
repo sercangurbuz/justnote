@@ -15,9 +15,14 @@ import { NotesArgs } from '../../models/args/notes.args';
 import { NoteType } from '../../models/note.model';
 import { CreateNoteInput } from './dto/createNote.input';
 import { PubSub } from 'graphql-subscriptions';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '../../guards/gql-auth.guard';
+import { UserEntity } from 'src/decorators/user.decorator';
+import { User } from '.prisma/client';
 
 const pubSub = new PubSub();
 @Resolver(() => NoteType)
+@UseGuards(GqlAuthGuard)
 export class NoteResolver {
   constructor(private notesService: NoteService) {}
 
@@ -45,8 +50,8 @@ export class NoteResolver {
   }
 
   @Mutation(() => NoteType)
-  createNote(@Args('data') data: CreateNoteInput) {
-    const newNote = this.notesService.createNote(data);
+  createNote(@Args('data') data: CreateNoteInput, @UserEntity() user: User) {
+    const newNote = this.notesService.createNote(data, user.id);
     pubSub.publish('noteCreated', { noteCreated: newNote });
     return newNote;
   }
