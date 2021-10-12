@@ -24,10 +24,11 @@ export class NoteService {
     });
   }
 
-  createNote(data: CreateNoteInput) {
+  createNote(data: CreateNoteInput, userId: number) {
     return this.prisma.note.create({
       data: {
         note: data.note,
+        userId,
       },
     });
   }

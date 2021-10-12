@@ -7,6 +7,9 @@ import config from './configs/config';
 import { GraphqlConfig } from './configs/config.interface';
 import { PrismaModule } from 'nestjs-prisma';
 import { NoteModule } from './resolvers/note/note.module';
+import { AuthModule } from './resolvers/auth/auth.module';
+import { Auth0Controller } from './controllers/auth0.controller';
+import { Auth0Service } from './services/user.service';
 
 @Module({
   imports: [
@@ -36,8 +39,10 @@ import { NoteModule } from './resolvers/note/note.module';
       },
       isGlobal: true,
     }),
+    AuthModule,
     NoteModule,
   ],
-  providers: [DateScalar],
+  controllers: [Auth0Controller],
+  providers: [DateScalar, Auth0Service],
 })
 export class AppModule {}
