@@ -4,10 +4,14 @@ import { Injectable } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
 import { passportJwtSecret } from 'jwks-rsa';
+import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(readonly configService: ConfigService) {
+  constructor(
+    readonly configService: ConfigService,
+    readonly prisma: PrismaService,
+  ) {
     super({
       secretOrKeyProvider: passportJwtSecret({
         cache: true,
@@ -24,7 +28,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: unknown): unknown {
-    return payload;
+  async validate(payload: any): Promise<any> {
+    console.log('payload', payload);
+    const user = await this.prisma.user.findFirst({
+      where: { sub: payload.sub },
+    });
+    return { ...payload, id: user.id };
   }
 }

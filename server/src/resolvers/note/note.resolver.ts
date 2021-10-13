@@ -42,15 +42,18 @@ export class NoteResolver {
   @Query(() => [NoteType])
   notes(
     @Args({ nullable: true }) noteArgs: NotesArgs,
+    @UserEntity() user: User,
     @Info() info: GraphQLResolveInfo,
   ) {
     console.log('noteArgs', noteArgs);
 
-    return this.notesService.getNotes(noteArgs);
+    return this.notesService.getNotes(noteArgs, user.id);
   }
 
   @Mutation(() => NoteType)
   createNote(@Args('data') data: CreateNoteInput, @UserEntity() user: User) {
+    console.log('user', user);
+
     const newNote = this.notesService.createNote(data, user.id);
     pubSub.publish('noteCreated', { noteCreated: newNote });
     return newNote;
