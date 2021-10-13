@@ -14,7 +14,7 @@ export class NoteService {
   getNotes(noteArgs: NotesArgs, userId: number) {
     if (Object.keys(noteArgs).length === 0) {
       return this.prisma.note.findMany({
-        where: { id: userId },
+        where: { userId },
         orderBy: { id: 'desc' },
       });
     }
