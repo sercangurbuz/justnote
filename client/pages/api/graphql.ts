@@ -46,8 +46,6 @@ const handler = nc<NextApiRequest, NextApiResponse>({ onError })
       pathRewrite: { '^/api/': '/' },
       logLevel: 'error',
       onProxyReq(proxyReq, req) {
-        console.log('toen', (req as NextApiRequest).accessToken);
-
         proxyReq.setHeader(
           'Authorization',
           `bearer ${(req as NextApiRequest).accessToken}`
