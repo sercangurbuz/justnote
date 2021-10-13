@@ -18,7 +18,7 @@ model Note {
 
 model User {
   id    Int    @id @default(autoincrement())
-  email String @db.VarChar(255)
-  sub   String @db.VarChar(255)
+  email String @unique @db.VarChar(255)
+  sub   String @unique @db.VarChar(255)
   Note  Note[]
 }

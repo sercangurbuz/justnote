@@ -11,9 +11,12 @@ export class NoteService {
     return this.prisma.note.findUnique({ where: { id } });
   }
 
-  getNotes(noteArgs: NotesArgs) {
+  getNotes(noteArgs: NotesArgs, userId: number) {
     if (Object.keys(noteArgs).length === 0) {
-      return this.prisma.note.findMany({ orderBy: { id: 'desc' } });
+      return this.prisma.note.findMany({
+        where: { id: userId },
+        orderBy: { id: 'desc' },
+      });
     }
 
     return this.prisma.note.findMany({

@@ -1,5 +1,7 @@
 import { Config } from './config.interface';
 
+const isDev = process.env.STAGE === 'dev';
+
 const config: Config = {
   nest: {
     port: 3000,
@@ -15,8 +17,8 @@ const config: Config = {
     path: 'api',
   },
   graphql: {
-    playgroundEnabled: true,
-    debug: true,
+    playgroundEnabled: isDev,
+    debug: isDev,
     schemaDestination: './schema.graphql',
     sortSchema: true,
   },
